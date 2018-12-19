@@ -8,17 +8,19 @@
 ;; vector basically quotes all of the internal items of the vector
 (require '[clojure.java.io :as io])
 
-(defn firstdup [nums, dups, cursum, idx]
-  ;; calculate the next sum
-  (def sum (+ cursum (nth nums idx) ) )
-  ;; if we have seen this sum already return it
-  ;; otherwise recurse
-  (if (contains? dups sum) sum (do
-    (def ndups (conj dups sum))
-    (let [ ii (mod (+ idx 1) (count nums) ) ]
-      (recur nums ndups sum ii)
-    )
-  ))
+(defn first-duplicate [coll]
+  "Return the first duplicate value in coll"
+  (reduce
+    ;; the reduce function takes the accumulator and the current value
+    ;; if the accumulator already contains the value x, then reduce
+    ;; is aborted early with the value x, other wise x is added
+    ;; to the accumulator.  The collection can be of infinite length
+    ;; but memory usage will be O(n) with the number of unique
+    ;; values found in coll
+    (fn [acc x] (if (contains? acc x) (reduced x) (conj acc x)))
+    ;; reduce initial val and collection
+    (hash-set nil) coll
+  )
 )
 
 ;; Main function
@@ -45,16 +47,14 @@
   ;; Open a file reader
   (with-open [rdr (io/reader "dat/day/1/input.txt")]
     ;; iterate over all lines using line-seq into the lines iterator
-    (let [lines (line-seq rdr)]
-      ;; parse each line into a long store into a vector nums
-      ;; this approach wouldn't work very well if the list of numbers
-      ;; exceeded the system memory
-      (let [ nums ( map #(Long/parseLong %) lines) ] 
-        ;; Find the first duplicate sum using tail recursion
-        (def ans ( firstdup nums (hash-set nil) 0 0 ) )
-        ;; Print the answer
-        (println ans)
+    (let [ lines (line-seq rdr) dups (hash-set nil) ]
+      ;; use cycle to continual loop over lines, converting them to a number,
+      ;; and then doing a reductions on it to produce a running sum
+      (def ans
+        (first-duplicate (reductions + (map #(Long/parseLong %) (cycle lines))))
       )
+      ;; Print the answer
+      (println ans)
     )
   )
 )
