@@ -31,7 +31,7 @@
   ;; Part 1
 
   ;; Open a file reader
-  (with-open [rdr (io/reader "dat/day/1/input.txt")]
+  (with-open [rdr (io/reader "../dat/day/1/input.txt")]
     ;; iterate over all lines using line-seq into the lines iterator
     (let [ lines (line-seq rdr) ]
       ;; parse each line into a long, sum them together set the value to ans
@@ -45,7 +45,7 @@
   ;; Part 2
 
   ;; Open a file reader
-  (with-open [rdr (io/reader "dat/day/1/input.txt")]
+  (with-open [rdr (io/reader "../dat/day/1/input.txt")]
     ;; iterate over all lines using line-seq into the lines iterator
     (let [ lines (line-seq rdr) dups (hash-set nil) ]
       ;; use cycle to continual loop over lines, converting them to a number,
