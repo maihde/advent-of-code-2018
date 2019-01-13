@@ -34,7 +34,7 @@ fn compute_duplicate_frequency(input: &str) -> Result<i64, String> {
 }
 
 fn main() -> Result<(), Box<Error>> {
-    let mut f = File::open("1.input").expect("file not found");
+    let mut f = File::open("../dat/day/1/input.txt").expect("file not found");
     let mut puzzle_input = String::new();
     f.read_to_string(&mut puzzle_input)
      .expect("something went wrong reading the file");
